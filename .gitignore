@@ -103,5 +103,6 @@ dist
 # TernJS port file
 .tern-port
 
-# Type-orm orm
+# Typeorm files
+ormconfig
 ormconfig.json
