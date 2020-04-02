@@ -21,11 +21,10 @@ const PORT = process.env.PORT || 3000;
 
   app.use(middlewares);
 
-  app.listen(PORT, () => console.log("SERVER RUNNING on port:"+ PORT));
+  app.listen(PORT, () => console.log("SERVER RUNNING on port:" + PORT));
 
   app.get("/", (_, res) => res.json({ message: "OK" }));
 
   app.post("/login", login.handleLogin(db));
   app.post("/register", register.handleRegister(db));
-
 })();

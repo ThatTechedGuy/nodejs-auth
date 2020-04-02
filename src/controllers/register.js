@@ -18,7 +18,7 @@ const handleRegister = db => async (req, res) => {
   const emailExists = await db.findOne({ email });
 
   if (emailExists !== undefined) {
-    res.status(401).json({ success: false, message: "User email already exists" });
+    res.status(401).json({ success: false, message: "Email already exists" });
     return;
   }
 
