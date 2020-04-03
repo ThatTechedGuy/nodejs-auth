@@ -1,7 +1,7 @@
 import { loginSchema } from "../services/validSchema";
 import { comparePassword } from "../services/passwordUtils";
 
-const handleLogin = db => async (req, res) => {
+const handleLogin = (db) => async (req, res) => {
   // Sanitizing the request body
   const { error, value } = loginSchema.validate(req.body);
 
@@ -20,8 +20,18 @@ const handleLogin = db => async (req, res) => {
   if (!user) {
     res.status(401).json({
       success: false,
-      message: "User not found. Please register first."
+      message: "User not found. Please register first.",
     });
+    return;
+  }
+
+  if (user.isConfirmed === false) {
+    res
+      .status(401)
+      .json({
+        success: false,
+        message: "Email not verified. Verify email first.",
+      });
     return;
   }
 
@@ -38,7 +48,7 @@ const handleLogin = db => async (req, res) => {
 };
 
 const login = {
-  handleLogin: handleLogin
+  handleLogin: handleLogin,
 };
 
 export default login;

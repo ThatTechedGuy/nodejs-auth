@@ -1,10 +1,11 @@
 import { registerSchema } from "./../services/validSchema";
 import { hashPassword } from "../services/passwordUtils";
+import { sendEmailVerification } from "../services/emailVerification";
 
 const handleRegister = db => async (req, res) => {
   // Sanitize the request body
   const { error, value } = registerSchema.validate(req.body);
-  
+
   if (error !== undefined) {
     // Incoming data not valid
     res.status(401).json({ success: false, message: error.message });
@@ -12,7 +13,6 @@ const handleRegister = db => async (req, res) => {
   }
 
   const { username, fullName, email, password } = req.body;
-
 
   // Checking if email exists
   const emailExists = await db.findOne({ email });
@@ -26,10 +26,11 @@ const handleRegister = db => async (req, res) => {
   const usernameExists = await db.findOne({ username });
 
   if (usernameExists !== undefined) {
-    res.status(401).json({ success: false, message: "Username already exists" });
+    res
+      .status(401)
+      .json({ success: false, message: "Username already exists" });
     return;
   }
-
 
   // Hashing password for storage
   const hash = await hashPassword(password);
@@ -49,9 +50,12 @@ const handleRegister = db => async (req, res) => {
   user.hash = hash;
 
   const result = await db.save(user);
-
   console.log(result);
 
+  const { id } = result;
+
+  // Send confirmation mail
+  sendEmailVerification(email);
 
   // Success
   res.status(200).json({ success: true, message: "Registered Successfully" });

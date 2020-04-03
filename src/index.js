@@ -1,16 +1,18 @@
 import "reflect-metadata";
 import { createConnection } from "typeorm";
-import User from "./entity/User.js";
-import middlewares from "./app";
+import express from "express";
 
 import dotenv from "dotenv";
 dotenv.config();
 
-import express from "express";
+import User from "./entity/User.js";
+import middlewares from "./app";
+
 import login from "./controllers/login";
 import register from "./controllers/register";
+import confirmation from './controllers/confirmation';
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 (async () => {
   const app = express();
@@ -27,4 +29,6 @@ const PORT = process.env.PORT || 3000;
 
   app.post("/login", login.handleLogin(db));
   app.post("/register", register.handleRegister(db));
+  app.get("/confirmation/:token", confirmation.handleEmailVerification(db));
+  app.post("/emailverify", confirmation.sendEmailConfirmation(db));
 })();
