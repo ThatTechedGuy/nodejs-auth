@@ -1,5 +1,8 @@
-import { loginSchema } from "../services/validSchema";
-import { comparePassword } from "../services/passwordUtils";
+import { loginSchema } from '../services/validSchema';
+import { comparePassword } from '../services/passwordUtils';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const handleLogin = (db) => async (req, res) => {
   // Sanitizing the request body
@@ -14,41 +17,49 @@ const handleLogin = (db) => async (req, res) => {
 
   // Checking for username or email
   var user;
-  if ("username" in value) user = await db.findOne({ username });
+  if ('username' in value) user = await db.findOne({ username });
   else user = await db.findOne({ email });
 
   if (!user) {
     res.status(401).json({
       success: false,
-      message: "User not found. Please register first.",
+      message: 'User not found. Please register first.'
     });
     return;
   }
 
+  // Checking if email is verified
   if (user.isConfirmed === false) {
-    res
-      .status(401)
-      .json({
-        success: false,
-        message: "Email not verified. Verify email first.",
-      });
+    res.status(401).json({
+      success: false,
+      message: 'Email not verified. Verify email first.'
+    });
     return;
   }
 
-  // Comparing password with stored hash
-  const hash = user.hash;
+  // Checking if password is correct by comparing password with stored hash
+  const { hash, ...data } = user;
   const result = await comparePassword(hash, password);
   if (result === false) {
-    res.status(401).json({ success: false, message: "Password is incorrect." });
+    res.status(401).json({ success: false, message: 'Password is incorrect.' });
     return;
   }
 
+  const accessToken = jwt.sign(data, process.env.JWT_LOGIN_SECRET, {
+    expiresIn: '15d'
+  });
+
   // Success
-  res.status(200).json({ success: true, message: "Logged in successfully" });
+  res.status(200).json({
+    success: true,
+    message: 'Logged in successfully',
+    data: data,
+    token: accessToken
+  });
 };
 
 const login = {
-  handleLogin: handleLogin,
+  handleLogin: handleLogin
 };
 
 export default login;

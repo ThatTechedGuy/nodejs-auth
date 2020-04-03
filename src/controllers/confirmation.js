@@ -1,7 +1,7 @@
-import { tokenSchema, emailVerificationSchema } from "../services/validSchema";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-import { sendEmailVerification } from "../services/emailVerification";
+import { tokenSchema, emailVerificationSchema } from '../services/validSchema';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import { sendEmailVerification } from '../services/emailVerification';
 dotenv.config();
 
 const handleEmailVerification = (db) => async (req, res) => {
@@ -22,7 +22,7 @@ const handleEmailVerification = (db) => async (req, res) => {
       // JWT not verified
       res.json({
         success: false,
-        message: "Send a verification request again. Something went wrong.",
+        message: 'Send a verification request again. Something went wrong.'
       });
       return;
     }
@@ -36,13 +36,13 @@ const handleEmailVerification = (db) => async (req, res) => {
     db.save(user);
     res.status(200).json({
       success: true,
-      message: "Email Verified. You may proceed to login.",
+      message: 'Email Verified. You may proceed to login.'
     });
   } catch (e) {
     // Failure
     res.status(401).json({
       success: false,
-      message: "Something went wrong. Please verify.",
+      message: 'Something went wrong. Please verify.'
     });
     return;
   }
@@ -61,29 +61,39 @@ const sendEmailConfirmation = (db) => async (req, res) => {
 
   // Checking for username or email
   var user;
-  if ("username" in value) user = await db.findOne({ username });
+  if ('username' in value) user = await db.findOne({ username });
   else user = await db.findOne({ email });
 
   if (!user) {
     res
       .status(400)
-      .json({ success: false, message: "Unknown username / email." });
+      .json({ success: false, message: 'Unknown username / email.' });
     return;
   }
 
-  
+  if (user.isConfirmed === true) {
+    res.status(400).json({
+      success: false,
+      message: 'Email is already verified. Please login.'
+    });
+    return;
+  }
 
   // Send a verification email to user.
   sendEmailVerification(user.email);
 
   // Success
+  res.status(200).json({ success: true, message: 'Email confirmation sent' });
+};
 
-  res.status(200).json({ success: true, message: "Email confirmation sent" });
+const sendResetPasswordLink = (db) => (req, res) => {
+  // TODO: handle forgot password endpoint
 };
 
 const confirmation = {
   handleEmailVerification: handleEmailVerification,
   sendEmailConfirmation: sendEmailConfirmation,
+  sendResetPasswordLink: sendResetPasswordLink
 };
 
 export default confirmation;

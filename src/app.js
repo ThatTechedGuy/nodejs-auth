@@ -1,11 +1,13 @@
-import express from "express";
+import express from 'express';
 
-import cors from "cors";
-import helmet from "helmet";
-import bodyParser from "body-parser";
+import cors from 'cors';
+import helmet from 'helmet';
+import bodyParser from 'body-parser';
+import morgan from 'morgan';
 
 const app = express();
 
+app.use(morgan('tiny'));
 app.use(cors());
 
 app.use(helmet());
