@@ -16,19 +16,34 @@ import confirmation from './controllers/confirmation';
 const PORT = process.env.PORT || 5000;
 
 (async () => {
+
+  console.log(__dirname);
   const app = express();
 
   const connection = await createConnection();
 
   const db = connection.getRepository(User);
 
+
   app.use(middlewares);
 
   app.listen(PORT, () => console.log('SERVER RUNNING on port:' + PORT));
 
-  app.get('/', (_, res) => res.status(200).json({ message: 'OK' }));
-  app.post('/login', login.handleLogin(db));
-  app.post('/register', register.handleRegister(db));
-  app.get('/confirmation/:token', confirmation.handleEmailVerification(db));
-  app.post('/emailverify', confirmation.sendEmailConfirmation(db));
+  app.get('/', (_, res) =>
+    res.status(200).json({ success: true, message: 'API Working!!' })
+  );
+  // Login User Account
+  app.post('/user/login', login.handleLogin(db));
+  // Register a User
+  app.post('/user/register', register.handleRegister(db));
+  // Sends email confirmation link
+  app.post(
+    '/user/sendEmailConfirmation',
+    confirmation.sendEmailConfirmation(db)
+  );
+  // Receives email confirmation through link
+  app.get(
+    '/user/getEmailConfirmation/:token',
+    confirmation.handleEmailVerification(db)
+  );
 })();

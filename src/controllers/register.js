@@ -1,6 +1,6 @@
 import { registerSchema } from "./../services/validSchema";
 import { hashPassword } from "../services/passwordUtils";
-import { sendEmailVerification } from "../services/emailVerification";
+import { sendEmailVerification } from "../services/emailBody";
 
 const handleRegister = db => async (req, res) => {
   // Sanitize the request body

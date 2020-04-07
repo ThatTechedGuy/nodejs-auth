@@ -1,7 +1,7 @@
-import { tokenSchema, emailVerificationSchema } from '../services/validSchema';
+import { tokenSchema, emailVerificationSchema, passwordConfirmationSchema } from '../services/validSchema';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { sendEmailVerification } from '../services/emailVerification';
+import { sendEmailVerification } from '../services/emailBody';
 dotenv.config();
 
 const handleEmailVerification = (db) => async (req, res) => {
@@ -87,7 +87,28 @@ const sendEmailConfirmation = (db) => async (req, res) => {
 };
 
 const sendResetPasswordLink = (db) => (req, res) => {
-  // TODO: handle forgot password endpoint
+  // Validating the request body
+  const {error, value} = passwordConfirmationSchema.validate(req.body);
+
+  if(error !== undefined){
+    res.status(401).json({success: false, message: error.message});
+    return;
+  }
+
+  const {email} = value;
+
+  // Checking if the user email exists
+  const user = db.findOne({email});
+
+  if(!user){
+    res.status(400).json({success: false, message:'Unknown email.'});
+    return;
+  }
+
+  // Send password change link through email.
+  
+
+
 };
 
 const confirmation = {

@@ -1,3 +1,11 @@
+configs.env
+dist
+pg-data
+.pg-data
+ormconfig.json
+ormconfig.docker.json
+db.env
+*.env
 # Logs
 logs
 *.log
