@@ -2,6 +2,7 @@ import { loginSchema } from '../services/validSchema';
 import { comparePassword } from '../services/passwordUtils';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import redis from '../services/store';
 dotenv.config();
 
 const handleLogin = (db) => async (req, res) => {
@@ -10,6 +11,23 @@ const handleLogin = (db) => async (req, res) => {
 
   if (error !== undefined) {
     res.status(401).json({ success: false, message: error.message });
+    return;
+  }
+
+  const { token } = value;
+
+  if (token) {
+    jwt.verify(token, process.env.JWT_LOGIN_SECRET, function (err, decoded) {
+      if (decoded === undefined || err) {
+        res
+          .status(401)
+          .json({ success: false, message: 'Expired or invalid.' });
+        return;
+      } else {
+        res.status(200).json({ success: true, message: 'Token verified!' });
+        return;
+      }
+    });
     return;
   }
 
@@ -46,7 +64,7 @@ const handleLogin = (db) => async (req, res) => {
   }
 
   const accessToken = jwt.sign(data, process.env.JWT_LOGIN_SECRET, {
-    expiresIn: '15d'
+    expiresIn: '7d'
   });
 
   // Success

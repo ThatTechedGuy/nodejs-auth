@@ -1,9 +1,14 @@
+import redis from './store';
+import jwt from 'jsonwebtoken';
+import generateOTP from './otp';
+import sendMail from './sendMail';
+
 export const sendEmailVerification = (email) => {
   const OTP = generateOTP();
   const emailToken = jwt.sign(
     {
       email: email,
-      otp : OTP
+      OTP : OTP
     }, // payload
     process.env.JWT_MAIL_SECRET, //secret
     { expiresIn: "2 days" } //expiration

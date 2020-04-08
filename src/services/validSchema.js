@@ -8,13 +8,16 @@ export const loginSchema = Joi.object({
       tlds: { allow: ['com', 'net'] }
     }),
 
-  username: Joi.string().trim().alphanum().min(3).max(30),
+  password: Joi.string().trim().min(7).max(150),
 
-  password: Joi.string().trim().min(7).max(150).required()
-}).xor('email', 'username');
+  token: [Joi.string(), Joi.number()]
+})
+.xor('token', 'password')
+.xor('token', 'email')
+.with('email', 'password');
 
 export const otpSchema = Joi.object({
-  OTP: Joi.string().trim().length(6).uppercase().required()
+  OTP: Joi.string().trim().alphanum().length(6).uppercase().required()
 });
 
 

@@ -10,6 +10,7 @@ import middlewares from './app';
 import login from './controllers/login';
 import register from './controllers/register';
 import confirmation from './controllers/confirmation';
+import redis from './services/store.js';
 
 const PORT = process.env.PORT || 5000;
 
@@ -45,11 +46,21 @@ const PORT = process.env.PORT || 5000;
   /* Test */
   app.get('/users', async (_, res) => {
     const users = await db.find();
-    res.json({"users" : users});
+    res.json({ users: users });
   });
 
   app.get('/clear', async (_, res) => {
     await db.clear();
+    redis.keys('*').then(function (keys) {
+      // Use pipeline instead of sending
+      // one command each time to improve the
+      // performance.
+      var pipeline = redis.pipeline();
+      keys.forEach(function (key) {
+        pipeline.del(key);
+      });
+      return pipeline.exec();
+    });
     const users = await db.find();
     res.json(users);
   });
