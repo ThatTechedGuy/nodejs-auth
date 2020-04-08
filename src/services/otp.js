@@ -1,6 +1,8 @@
+import crypto from 'crypto-random-string';
+
 // Generates random 6 digit OTP
 const generateOTP = () => {
-  return Math.floor(100000 + Math.random() * 900000);
+  return crypto({ length: 6, type: 'distinguishable' });
 };
 
 export default generateOTP;

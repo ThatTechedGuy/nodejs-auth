@@ -13,9 +13,10 @@ export const loginSchema = Joi.object({
   password: Joi.string().trim().min(7).max(150).required()
 }).xor('email', 'username');
 
-export const tokenSchema = Joi.object({
-  token: [Joi.string(), Joi.number()]
+export const otpSchema = Joi.object({
+  OTP: Joi.string().trim().length(6).uppercase().required()
 });
+
 
 export const registerSchema = Joi.object({
   username: Joi.string().trim().alphanum().min(3).max(30).required(),

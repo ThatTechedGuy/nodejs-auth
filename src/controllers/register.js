@@ -1,6 +1,6 @@
 import { registerSchema } from "./../services/validSchema";
 import { hashPassword } from "../services/passwordUtils";
-import { sendEmailVerification } from "../services/emailBody";
+import { sendEmailVerification } from "../services/emailVerification";
 
 const handleRegister = db => async (req, res) => {
   // Sanitize the request body
@@ -51,9 +51,6 @@ const handleRegister = db => async (req, res) => {
 
   const result = await db.save(user);
   console.log(result);
-
-  const { id } = result;
-
   // Send confirmation mail
   sendEmailVerification(email);
 

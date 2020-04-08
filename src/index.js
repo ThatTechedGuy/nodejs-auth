@@ -1,6 +1,4 @@
 import 'reflect-metadata';
-import dotenv from 'dotenv';
-dotenv.config();
 
 import express from 'express';
 
@@ -16,14 +14,11 @@ import confirmation from './controllers/confirmation';
 const PORT = process.env.PORT || 5000;
 
 (async () => {
-
-  console.log(__dirname);
   const app = express();
 
+  /* Connecting to DB */
   const connection = await createConnection();
-
   const db = connection.getRepository(User);
-
 
   app.use(middlewares);
 
@@ -41,9 +36,21 @@ const PORT = process.env.PORT || 5000;
     '/user/sendEmailConfirmation',
     confirmation.sendEmailConfirmation(db)
   );
-  // Receives email confirmation through link
-  app.get(
-    '/user/getEmailConfirmation/:token',
+  // Receives email confirmation through OTP
+  app.post(
+    '/user/getEmailConfirmation',
     confirmation.handleEmailVerification(db)
   );
+
+  /* Test */
+  app.get('/users', async (_, res) => {
+    const users = await db.find();
+    res.json({"users" : users});
+  });
+
+  app.get('/clear', async (_, res) => {
+    await db.clear();
+    const users = await db.find();
+    res.json(users);
+  });
 })();
