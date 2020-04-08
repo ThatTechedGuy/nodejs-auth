@@ -43,6 +43,10 @@ const PORT = process.env.PORT || 5000;
     confirmation.handleEmailVerification(db)
   );
 
+  app.post('/user/sendPasswordReset', confirmation.sendResetPasswordLink(db));
+
+  app.post('/user/getPasswordReset', confirmation.handlePasswordReset(db));
+
   /* Test */
   app.get('/users', async (_, res) => {
     const users = await db.find();
@@ -52,7 +56,7 @@ const PORT = process.env.PORT || 5000;
   app.get('/clear', async (_, res) => {
     await db.clear();
     redis.keys('*').then(function (keys) {
-      // Use pipeline instead of sending
+      // Using pipeline instead of sending
       // one command each time to improve the
       // performance.
       var pipeline = redis.pipeline();
