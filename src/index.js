@@ -1,5 +1,9 @@
 import 'reflect-metadata';
 
+import "core-js/stable";
+import "regenerator-runtime/runtime";
+
+import dotenv from 'dotenv';
 import express from 'express';
 
 import { createConnection } from 'typeorm';
@@ -12,7 +16,11 @@ import register from './controllers/register';
 import confirmation from './controllers/confirmation';
 import redis from './services/store.js';
 
+
+dotenv.config();
+
 const PORT = process.env.PORT || 5000;
+
 
 (async () => {
   const app = express();

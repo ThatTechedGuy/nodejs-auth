@@ -7,3 +7,5 @@ WORKDIR /usr/src/auth
 COPY package.json /usr/src/auth
 RUN npm install
 COPY . .
+RUN npm run clean
+RUN npm run build
