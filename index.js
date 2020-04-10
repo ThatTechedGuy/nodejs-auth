@@ -2,9 +2,7 @@
 
 require("reflect-metadata");
 
-require("core-js");
 
-require("regenerator-runtime/runtime");
 
 var _dotenv = _interopRequireDefault(require("dotenv"));
 
