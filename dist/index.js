@@ -1,10 +1,10 @@
 "use strict";
 
+require("core-js");
+
+require("regenerator-runtime");
+
 require("reflect-metadata");
-
-require("core-js/stable");
-
-require("regenerator-runtime/runtime");
 
 var _dotenv = _interopRequireDefault(require("dotenv"));
 

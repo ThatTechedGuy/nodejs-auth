@@ -1,7 +1,9 @@
+import 'core-js';
+import 'regenerator-runtime';
+
+
 import 'reflect-metadata';
 
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
 import dotenv from 'dotenv';
 import express from 'express';
 
