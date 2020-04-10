@@ -2,7 +2,7 @@
 
 require("reflect-metadata");
 
-require("core-js/stable");
+require("core-js");
 
 require("regenerator-runtime/runtime");
 
