@@ -111,8 +111,6 @@ ormconfig.json
 
 # Persistence data
 postgres-data
-dist
-
 .yarn*
 yarn*
 
