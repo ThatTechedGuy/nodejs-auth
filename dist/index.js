@@ -48,7 +48,6 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
 
         case 3:
           connection = _context3.sent;
-          console.log('HELLO');
           db = connection.getRepository(_User["default"]);
           app.use(_app["default"]);
           app.listen(PORT, function () {
@@ -143,7 +142,7 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
             };
           }());
 
-        case 17:
+        case 16:
         case "end":
           return _context3.stop();
       }

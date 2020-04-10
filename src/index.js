@@ -24,9 +24,7 @@ const PORT = process.env.PORT || 5000;
 
   /* Connecting to DB */
   const connection = await createConnection();
-  console.log('HELLO');
   const db = connection.getRepository(User);
-
   app.use(middlewares);
 
   app.listen(PORT, () => console.log('SERVER RUNNING on port:' + PORT));
