@@ -12,17 +12,17 @@ var _express = _interopRequireDefault(require("express"));
 
 var _typeorm = require("typeorm");
 
-var _User = _interopRequireDefault(require("./entity/User.js"));
+var _User = _interopRequireDefault(require("./dist/entity/User.js"));
 
-var _app = _interopRequireDefault(require("./app"));
+var _app = _interopRequireDefault(require("./dist/app"));
 
-var _login = _interopRequireDefault(require("./controllers/login"));
+var _login = _interopRequireDefault(require("./dist/controllers/login"));
 
-var _register = _interopRequireDefault(require("./controllers/register"));
+var _register = _interopRequireDefault(require("./dist/controllers/register"));
 
-var _confirmation = _interopRequireDefault(require("./controllers/confirmation"));
+var _confirmation = _interopRequireDefault(require("./dist/controllers/confirmation"));
 
-var _store = _interopRequireDefault(require("./services/store.js"));
+var _store = _interopRequireDefault(require("./dist/services/store.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 

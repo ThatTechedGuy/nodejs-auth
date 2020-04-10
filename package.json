@@ -33,11 +33,7 @@
     "nodemon": "^2.0.2"
   },
   "scripts": {
-    "start": "node dist/index.js",
-    "build": "babel src --out-dir dist",
-    "serve": "nodemon dist/index.js",
-    "dev": "nodemon --exec babel-node src/index.js",
-    "clean": "rm -rf dist && mkdir -p dist"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
