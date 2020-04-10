@@ -11,7 +11,7 @@ const app = express();
 app.use(compression());
 
 
-app.use(morgan('tiny'));
+app.use(morgan());
 app.use(cors());
 
 

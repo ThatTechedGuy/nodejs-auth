@@ -24,6 +24,8 @@ const PORT = process.env.PORT || 5000;
 (async () => {
   const app = express();
 
+  console.log('Starting server....');
+
   /* Connecting to DB */
   const connection = await createConnection();
   const db = connection.getRepository(User);
