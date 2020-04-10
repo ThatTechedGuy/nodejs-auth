@@ -1,7 +1,6 @@
 import 'core-js';
 import 'regenerator-runtime';
 
-
 import 'reflect-metadata';
 
 import dotenv from 'dotenv';
@@ -26,8 +25,21 @@ const PORT = process.env.PORT || 5000;
 
   console.log('Starting server....');
 
-  /* Connecting to DB */
-  const connection = await createConnection();
+  let connection;
+
+  let retries = 5;
+  while (retries !== 0) {
+    try {
+      connection = await createConnection();
+      break;
+    } catch (err) {
+      console.log(err);
+      --retries;
+      console.log('RETRIES LEFT:' + retries);
+      await new Promise((res) => setTimeout(res, 1000));
+    }
+  }
+
   const db = connection.getRepository(User);
   app.use(middlewares);
 
