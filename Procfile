@@ -1,1 +1,1 @@
-web:npm install && node dist/index.js
+web:npm start

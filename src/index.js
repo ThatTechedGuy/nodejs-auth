@@ -1,7 +1,8 @@
+import 'core-js';
+import 'regenerator-runtime';
+
 import 'reflect-metadata';
 
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
 import dotenv from 'dotenv';
 import express from 'express';
 
@@ -22,11 +23,24 @@ const PORT = process.env.PORT || 5000;
 (async () => {
   const app = express();
 
-  /* Connecting to DB */
-  const connection = await createConnection();
-  console.log('HELLO');
-  const db = connection.getRepository(User);
+  console.log('Starting server....');
 
+  let connection;
+
+  let retries = 5;
+  while (retries !== 0) {
+    try {
+      connection = await createConnection();
+      break;
+    } catch (err) {
+      console.log(err);
+      --retries;
+      console.log('RETRIES LEFT:' + retries);
+      await new Promise((res) => setTimeout(res, 1000));
+    }
+  }
+
+  const db = connection.getRepository(User);
   app.use(middlewares);
 
   app.listen(PORT, () => console.log('SERVER RUNNING on port:' + PORT));
